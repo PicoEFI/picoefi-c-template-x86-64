@@ -275,7 +275,7 @@ endif
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override SRCFILES := $(shell find -L src cc-runtime/src picoefi/x86_64 -type f 2>/dev/null | LC_ALL=C sort)
+override SRCFILES := $(shell find -L src freestanding-lgrt/src picoefi/x86_64 -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
 override ASFILES := $(filter %.S,$(SRCFILES))
 override NASMFILES := $(filter %.asm,$(SRCFILES))
@@ -319,7 +319,7 @@ bin/$(OUTPUT): GNUmakefile obj/CC obj/CFLAGS obj/LDFLAGS picoefi/x86_64/link_scr
 
 # The compiler may emit calls to the memory functions and the compiler
 # runtime that LTO does not account for, so never build those with LTO.
-obj/src/memory.c.o obj/cc-runtime/src/cc-runtime.c.o: override CFLAGS += -fno-lto
+obj/src/memory.c.o obj/freestanding-lgrt/src/freestanding-lgrt.c.o: override CFLAGS += -fno-lto
 
 # Compilation rules for *.c files.
 obj/%.c.o: %.c GNUmakefile obj/CC obj/CFLAGS obj/CPPFLAGS
@@ -365,7 +365,7 @@ clean:
 # Remove everything built and generated including downloaded dependencies.
 .PHONY: distclean
 distclean: clean
-	rm -rf .deps-obtained .cache compile_commands.json freestanding-c-hdrs cc-runtime picoefi edk2-ovmf-bins edk2-ovmf-bins.tar.gz
+	rm -rf .deps-obtained .cache compile_commands.json freestanding-c-hdrs freestanding-lgrt picoefi edk2-ovmf-bins edk2-ovmf-bins.tar.gz
 
 # Install the final built executable to its final on-root location. Not
 # install(1), which takes other arguments on illumos and Solaris.

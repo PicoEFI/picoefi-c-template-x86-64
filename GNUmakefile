@@ -129,7 +129,7 @@ override CPPFLAGS := \
     -I picoefi/inc \
     -isystem freestanding-c-hdrs/include \
     $(CPPFLAGS) \
-    -MMD \
+    -MD \
     -MP
 
 # Internal nasm flags that should not be changed by the user.

@@ -138,7 +138,7 @@ override CFLAGS += \
 override CPPFLAGS := \
     -nostdinc \
     -I src \
-    -I picoefi/inc \
+    -I picoefi/include \
     -isystem freestanding-c-hdrs/include \
     $(CPPFLAGS) \
     -MD \
@@ -171,7 +171,7 @@ override LDFLAGS += \
     -Wl,--gc-sections \
     -Wl,--build-id=none \
     -Wl,--hash-style=gnu \
-    -Wl,-T,picoefi/x86_64/link_script.lds \
+    -Wl,-T,picoefi/src/x86_64/link_script.lds \
     -Wl,-m,elf_x86_64
 
 # Check that the compiler works with the given flags, as the checks below
@@ -288,7 +288,7 @@ endif
 
 # Use "find" to glob all *.c, *.S, and *.asm files in the tree and obtain the
 # object and header dependency file names.
-override SRCFILES := $(shell find -L src freestanding-lgrt/src picoefi/x86_64 -type f 2>/dev/null | LC_ALL=C sort)
+override SRCFILES := $(shell find -L src freestanding-lgrt/src picoefi/src/x86_64 -type f 2>/dev/null | LC_ALL=C sort)
 override CFILES := $(filter %.c,$(SRCFILES))
 override ASFILES := $(filter %.S,$(SRCFILES))
 override NASMFILES := $(filter %.asm,$(SRCFILES))
@@ -325,7 +325,7 @@ bin/$(OUTPUT).efi: bin/$(OUTPUT) GNUmakefile obj/OBJCOPY
 	$(OBJCOPY) -O binary $< $@
 
 # Link rules for the final executable.
-bin/$(OUTPUT): GNUmakefile obj/CC obj/CFLAGS obj/LDFLAGS picoefi/x86_64/link_script.lds $(OBJ)
+bin/$(OUTPUT): GNUmakefile obj/CC obj/CFLAGS obj/LDFLAGS picoefi/src/x86_64/link_script.lds $(OBJ)
 	mkdir -p "$(dir $@)"
 	$(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $@
 

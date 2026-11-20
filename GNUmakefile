@@ -119,8 +119,12 @@ override CFLAGS += \
     -Wextra \
     -std=gnu11 \
     -ffreestanding \
+    -fno-builtin \
     -fno-exceptions \
+    -fno-asynchronous-unwind-tables \
+    -fno-unwind-tables \
     -fno-common \
+    -fno-strict-aliasing \
     -fno-stack-protector \
     -fno-stack-check \
     -fshort-wchar \
@@ -137,6 +141,7 @@ override CFLAGS += \
 # Internal C preprocessor flags that should not be changed by the user.
 override CPPFLAGS := \
     -nostdinc \
+    -include src/hidden.h \
     -I src \
     -I picoefi/include \
     -isystem freestanding-c-hdrs/include \
@@ -265,6 +270,12 @@ endif
 ifeq ($(call CC_HAS_COMPILE_FLAG,-mno-80387),1)
     override CFLAGS += \
         -mno-80387
+endif
+
+# Older GCCs need this for ms_abi calls. Clang has no such flag.
+ifneq ($(CC_IS_CLANG),1)
+    override CFLAGS += \
+        -maccumulate-outgoing-args
 endif
 
 # Pack relative relocations where the linker can, as RELR tables take a

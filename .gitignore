@@ -4,6 +4,7 @@
 /boot
 /freestanding-c-hdrs
 /freestanding-lgrt
+/gmake-toolchain-helper
 /picoefi
 /edk2-ovmf-bins
 /edk2-ovmf-bins.tar.gz
